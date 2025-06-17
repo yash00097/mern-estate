@@ -8,6 +8,7 @@ import Profile from './pages/Profile'
 import PrivateRoute from './components/PrivateRoute'
 function App() {
   return (
+
     <BrowserRouter>
      <Header/>
      <Routes>
