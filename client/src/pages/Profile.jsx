@@ -12,6 +12,7 @@ import {
   signOutSuccess,
   signOutFailure
 } from '../redux/user/userSlice';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -68,7 +69,6 @@ const Profile = () => {
       setFormData({
         username: currentUser.username,
         email: currentUser.email,
-        password: ''
       });
     }
   };
@@ -117,30 +117,32 @@ const Profile = () => {
           alt="profile"          
           className="w-24 h-24 rounded-full self-center object-cover cursor-pointer" 
         />
-        <input 
-          type="text" 
-          placeholder='username' 
-          id='username' 
-          value={formData.username}  
-          className='border p-3 rounded-lg' 
-          onChange={handleChange}
-        />
-        <input 
-          type="email" 
-          placeholder='email' 
-          id='email' 
-          value={formData.email}  
-          className='border p-3 rounded-lg' 
-          onChange={handleChange}
-        />
-        <input 
-          type="password" 
-          placeholder='password' 
-          id='password' 
-          value={formData.password} 
-          className='border p-3 rounded-lg' 
-          onChange={handleChange}
-        />
+        <div className="flex items-center mb-4">
+          <label htmlFor="username" className="w-24 font-medium">
+            Username:
+          </label>
+          <input
+            type="text"
+            placeholder="username"
+            id="username"
+            value={formData.username}
+            className="border p-3 rounded-lg flex-1"
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex items-center mb-4">
+          <label htmlFor="email" className="w-24 font-medium">
+            UserEmail:
+          </label>
+          <input
+            type="email"
+            placeholder="email"
+            id="email"
+            value={formData.email}
+            className="border p-3 rounded-lg flex-1"
+            onChange={handleChange}
+          />
+        </div>
         <button
           disabled={loading}
           className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'
@@ -150,6 +152,9 @@ const Profile = () => {
       </form>
       <div className="flex justify-between mt-5">
         <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>Delete account</span>
+        <Link to={'/forgot-password'}>
+          <span className='text-red-700 cursor-pointer'>Change password</span>
+        </Link>
         <span onClick={handleSignOut}className='text-red-700 cursor-pointer'>Sign out</span>
       </div>
       <p className='text-red-700 mt-5'>{error || ''}</p>
