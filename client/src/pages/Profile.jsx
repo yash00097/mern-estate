@@ -107,7 +107,7 @@ const Profile = () => {
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className="text-3xl font-bold text-center my-8 text-blue-800">
-        {currentUser.username}
+        Profile
       </h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input type="file" ref={fileRef} className='hidden' accept='image/*' />
