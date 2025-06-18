@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUGrIHB1yibmpfI1LGnHvYrBr4C0oHhMcyLg&s",
     },
+    otp: { 
+        type: String,
+    },
+    otpExpires: {
+        type: Date,
+    },
 }, 
 {
     timestamps: true,

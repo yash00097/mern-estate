@@ -5,6 +5,8 @@ import About from './pages/About'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Profile from './pages/Profile'
+import ForgotPassword from './pages/ForgotPassword'
+import VerifyOTP from './pages/VerifyOTP'
 import PrivateRoute from './components/PrivateRoute'
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <Route path='/about' element={<About/>}/>
       <Route path='/sign-in' element={<SignIn/>}/>
       <Route path='/sign-up' element={<SignUp/>}/>
+      <Route path='/forgot-password' element={<ForgotPassword />} /> 
+      <Route path='/verify-otp' element={<VerifyOTP />} /> 
       <Route element={<PrivateRoute/>}>
         <Route path='/profile' element={<Profile/>}/>
       </Route>
