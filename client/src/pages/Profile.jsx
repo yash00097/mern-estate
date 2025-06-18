@@ -119,7 +119,7 @@ const Profile = () => {
         />
         <div className="flex items-center mb-4">
           <label htmlFor="username" className="w-24 font-medium">
-            Username:
+            UserName:
           </label>
           <input
             type="text"
