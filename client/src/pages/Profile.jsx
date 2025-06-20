@@ -105,20 +105,23 @@ const Profile = () => {
   };
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className="text-3xl font-bold text-center my-8 text-blue-800">
+    <div className="p-3 max-w-lg mx-auto">
+      <h1 className="text-3xl font-bold text-center my-8 text-blue-800 dark:text-blue-300">
         Profile
       </h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input type="file" ref={fileRef} className='hidden' accept='image/*' />
-        <img 
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input type="file" ref={fileRef} className="hidden" accept="image/*" />
+
+        <img
           onClick={() => fileRef.current.click()}
-          src={currentUser.avatar} 
-          alt="profile"          
-          className="w-24 h-24 rounded-full self-center object-cover cursor-pointer" 
+          src={currentUser.avatar}
+          alt="profile"
+          className="w-24 h-24 rounded-full self-center object-cover cursor-pointer ring-2 ring-blue-500 dark:ring-blue-300"
         />
+
         <div className="flex items-center mb-4">
-          <label htmlFor="username" className="w-24 font-medium">
+          <label htmlFor="username" className="w-24 font-medium text-gray-800 dark:text-gray-100">
             UserName:
           </label>
           <input
@@ -126,12 +129,13 @@ const Profile = () => {
             placeholder="username"
             id="username"
             value={formData.username}
-            className="border p-3 rounded-lg flex-1"
+            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 p-3 rounded-lg flex-1"
             onChange={handleChange}
           />
         </div>
+
         <div className="flex items-center mb-4">
-          <label htmlFor="email" className="w-24 font-medium">
+          <label htmlFor="email" className="w-24 font-medium text-gray-800 dark:text-gray-100">
             UserEmail:
           </label>
           <input
@@ -139,29 +143,39 @@ const Profile = () => {
             placeholder="email"
             id="email"
             value={formData.email}
-            className="border p-3 rounded-lg flex-1"
+            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 p-3 rounded-lg flex-1"
             onChange={handleChange}
           />
         </div>
+
         <button
           disabled={loading}
-          className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'
+          className="bg-slate-700 dark:bg-slate-800 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80 transition"
         >
           {loading ? 'Loading...' : 'Update'}
         </button>
       </form>
-      <div className="flex justify-between mt-5">
-        <span onClick={handleDeleteUser} className='text-red-700 cursor-pointer'>Delete account</span>
-        <Link to={'/forgot-password'}>
-          <span className='text-red-700 cursor-pointer'>Change password</span>
+
+      <div className="flex justify-between mt-5 text-sm sm:text-base">
+        <span onClick={handleDeleteUser} className="text-red-700 dark:text-red-400 cursor-pointer">
+          Delete account
+        </span>
+        <Link to="/forgot-password">
+          <span className="text-red-700 dark:text-red-400 cursor-pointer">
+            Change password
+          </span>
         </Link>
-        <span onClick={handleSignOut}className='text-red-700 cursor-pointer'>Sign out</span>
+        <span onClick={handleSignOut} className="text-red-700 dark:text-red-400 cursor-pointer">
+          Sign out
+        </span>
       </div>
-      <p className='text-red-700 mt-5'>{error || ''}</p>
-      <p className='text-green-700 mt-5'>
+
+      <p className="text-red-700 dark:text-red-400 mt-5">{error || ''}</p>
+      <p className="text-green-700 dark:text-green-400 mt-5">
         {updateSuccess ? 'User updated successfully!' : ''}
       </p>
     </div>
+
   );
 };
 
