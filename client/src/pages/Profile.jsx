@@ -1,5 +1,4 @@
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState, useRef, useEffect } from 'react';
 import {
   updateUserStart,
@@ -13,19 +12,24 @@ import {
   signOutFailure
 } from '../redux/user/userSlice';
 import { Link } from 'react-router-dom';
+import MarvelCharacterInput from '../components/MarvelCharacterInput'; // ✅ Import component
 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
+  const dispatch = useDispatch();
+
+    const marvelPublicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY;
+  const marvelPrivateKey = import.meta.env.VITE_MARVEL_PRIVATE_KEY;
+
 
   const [formData, setFormData] = useState({
     username: currentUser.username,
     email: currentUser.email,
-    password: ''
+    user_character: currentUser.user_character || '',
   });
-  
+
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(updateUserFailure(null));
@@ -33,11 +37,16 @@ const Profile = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    
+
     if (error || updateSuccess) {
       dispatch(updateUserFailure(null));
       setUpdateSuccess(false);
     }
+  };
+
+  // ✅ Marvel character handler
+  const handleCharacterChange = (value) => {
+    setFormData((prev) => ({ ...prev, user_character: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -50,28 +59,30 @@ const Profile = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      
+
       if (data.success === false) {
         dispatch(updateUserFailure(data.error));
         setFormData({
           username: currentUser.username,
           email: currentUser.email,
-          password: ''
+          user_character: currentUser.user_character,
         });
         return;
       }
-      
+
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
-      setFormData(prev => ({ ...prev, password: '' }));
+      setFormData((prev) => ({ ...prev }));
     } catch (error) {
       dispatch(updateUserFailure(error.message));
       setFormData({
         username: currentUser.username,
         email: currentUser.email,
+        user_character: currentUser.user_character || '',
       });
     }
   };
+
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
@@ -87,22 +98,23 @@ const Profile = () => {
     } catch (error) {
       deleteUserFailure(error.message);
     }
-  }
-  const handleSignOut = async() => {
+  };
+
+  const handleSignOut = async () => {
     try {
       dispatch(signOutStart());
-      const res = await fetch('/api/auth/signout');//default method is GET
+      const res = await fetch('/api/auth/signout');
       const data = await res.json();
       if (data.success === false) {
         dispatch(signOutFailure(data.error));
         return;
       }
       dispatch(signOutSuccess(data));
-
     } catch (error) {
       dispatch(signOutFailure(error.message));
     }
   };
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -122,30 +134,44 @@ const Profile = () => {
 
         <div className="flex items-center mb-4">
           <label htmlFor="username" className="w-24 font-medium text-gray-800 dark:text-gray-100">
-            UserName:
+            Username:
           </label>
           <input
             type="text"
-            placeholder="username"
             id="username"
             value={formData.username}
-            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 p-3 rounded-lg flex-1"
             onChange={handleChange}
+            placeholder="Username"
+            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 p-3 rounded-lg flex-1"
           />
         </div>
 
         <div className="flex items-center mb-4">
           <label htmlFor="email" className="w-24 font-medium text-gray-800 dark:text-gray-100">
-            UserEmail:
+            Email:
           </label>
           <input
             type="email"
-            placeholder="email"
             id="email"
             value={formData.email}
-            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 p-3 rounded-lg flex-1"
             onChange={handleChange}
+            placeholder="Email"
+            className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 p-3 rounded-lg flex-1"
           />
+        </div>
+
+        <div className="flex items-center mb-4">
+          <label className="w-24 font-medium text-gray-800 dark:text-gray-100">
+            Character:
+          </label>
+          
+            <MarvelCharacterInput
+              value={formData.user_character}
+              onChange={handleCharacterChange}
+              publicKey={marvelPublicKey}
+              privateKey={marvelPrivateKey}
+            />
+          
         </div>
 
         <button
@@ -175,7 +201,6 @@ const Profile = () => {
         {updateSuccess ? 'User updated successfully!' : ''}
       </p>
     </div>
-
   );
 };
 
