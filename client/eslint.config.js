@@ -28,11 +28,16 @@ export default [
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
+
+      // 🔕 Disable unnecessary React rules
       'react/jsx-no-target-blank': 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-    },
+      'react/react-in-jsx-scope': 'off', // not needed in React 17+
+      'react/prop-types': 'off', // if you're using TypeScript or prefer not using prop-types
+      'react/no-unescaped-entities': 'off', // disable warning for stuff like apostrophes
+      'react/display-name': 'off', // optional: useful only for debugging HOCs
+
+      // 🚧 React Refresh config
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    }
   },
 ]

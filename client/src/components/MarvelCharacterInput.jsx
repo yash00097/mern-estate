@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import CryptoJS from 'crypto-js';
 
 const debounce = (func, delay) => {
@@ -22,7 +21,6 @@ const MarvelCharacterInput = ({
 
   useEffect(() => {
     setInputValue(value || '');
-    // Verify keys when component mounts
     setKeysValid(!!publicKey && !!privateKey);
   }, [value, publicKey, privateKey]);
 
@@ -79,7 +77,7 @@ const MarvelCharacterInput = ({
         value={inputValue}
         onChange={handleInputChange}
         placeholder="Type your favorite Marvel character name"
-        className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
       />
       {suggestions.length > 0 && (
         <ul className="absolute left-0 right-0 mt-1 p-0 bg-white dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded-lg max-h-48 overflow-y-auto z-10 shadow-lg">
@@ -102,12 +100,6 @@ const MarvelCharacterInput = ({
       )}
     </div>
   );
-};
-MarvelCharacterInput.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  publicKey: PropTypes.string,
-  privateKey: PropTypes.string,
 };
 
 export default MarvelCharacterInput;

@@ -19,7 +19,7 @@ const Profile = () => {
   const fileRef = useRef(null);
   const dispatch = useDispatch();
 
-    const marvelPublicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY;
+  const marvelPublicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY;
   const marvelPrivateKey = import.meta.env.VITE_MARVEL_PRIVATE_KEY;
 
 
@@ -44,7 +44,6 @@ const Profile = () => {
     }
   };
 
-  // ✅ Marvel character handler
   const handleCharacterChange = (value) => {
     setFormData((prev) => ({ ...prev, user_character: value }));
   };
@@ -69,7 +68,7 @@ const Profile = () => {
         });
         return;
       }
-
+      console.log(data);
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
       setFormData((prev) => ({ ...prev }));
