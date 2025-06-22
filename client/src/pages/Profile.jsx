@@ -161,16 +161,16 @@ const Profile = () => {
 
         <div className="flex items-center mb-4">
           <label className="w-24 font-medium text-gray-800 dark:text-gray-100">
-            Character:
+            Alias:
           </label>
-          
+          <div className="flex-1">
             <MarvelCharacterInput
               value={formData.user_character}
               onChange={handleCharacterChange}
               publicKey={marvelPublicKey}
               privateKey={marvelPrivateKey}
             />
-          
+          </div>
         </div>
 
         <button
