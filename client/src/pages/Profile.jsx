@@ -179,6 +179,9 @@ const Profile = () => {
         >
           {loading ? 'Loading...' : 'Update'}
         </button>
+        <Link to="/create-listing" className="bg-blue-700 dark:bg-blue-300 text-white dark:text-black rounded-lg p-3 uppercase hover:opacity-95 transition text-center">
+          Create a Marvel listing
+        </Link>
       </form>
 
       <div className="flex justify-between mt-5 text-sm sm:text-base">

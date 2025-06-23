@@ -5,6 +5,7 @@ import About from './pages/About'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Profile from './pages/Profile'
+import CreateListing from './pages/CreateListing'
 import ForgotPassword from './pages/ForgotPassword'
 import VerifyOTP from './pages/VerifyOTP'
 import PrivateRoute from './components/PrivateRoute'
@@ -22,6 +23,7 @@ function App() {
       <Route path='/verify-otp' element={<VerifyOTP />} /> 
       <Route element={<PrivateRoute/>}>
         <Route path='/profile' element={<Profile/>}/>
+        <Route path='/create-listing' element={<CreateListing/>}/>
       </Route>
      </Routes>
     </BrowserRouter>
