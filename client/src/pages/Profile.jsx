@@ -19,21 +19,81 @@ const Profile = () => {
   const fileRef = useRef(null);
   const dispatch = useDispatch();
 
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [fileUploadError, setFileUploadError] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+
   const marvelPublicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY;
   const marvelPrivateKey = import.meta.env.VITE_MARVEL_PRIVATE_KEY;
-
+  const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
   const [formData, setFormData] = useState({
+    avatar: currentUser.avatar,
     username: currentUser.username,
     email: currentUser.email,
     user_character: currentUser.user_character || '',
   });
 
-  const [updateSuccess, setUpdateSuccess] = useState(false);
-
   useEffect(() => {
     dispatch(updateUserFailure(null));
   }, [dispatch]);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+    
+    if (selectedFile.size > 3 * 1024 * 1024) {
+      setFileUploadError('File size must be less than 2MB');
+      return;
+    }
+    if (!selectedFile.type.startsWith('image/')) {
+      setFileUploadError('Please select an image file');
+      return;
+    }
+    
+    setFileUploadError(false);
+    setIsUploading(true);
+    
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('upload_preset', cloudinaryUploadPreset);
+    
+    const xhr = new XMLHttpRequest();
+    
+    xhr.upload.addEventListener('progress', (event) => {
+      if (event.lengthComputable) {
+        const percent = Math.round((event.loaded / event.total) * 100);
+        setUploadProgress(percent);
+      }
+    });
+    
+    xhr.open(
+      'POST', 
+      `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`
+    );
+    
+    xhr.onload = () => {
+      setIsUploading(false);
+      setUploadProgress(0);
+      
+      if (xhr.status >= 200 && xhr.status < 300) {
+        const response = JSON.parse(xhr.responseText);
+        setFormData(prev => ({ ...prev, avatar: response.secure_url }));
+      } else {
+        setFileUploadError('Image upload failed. Please try again.');
+      }
+    };
+    
+    xhr.onerror = () => {
+      setIsUploading(false);
+      setUploadProgress(0);
+      setFileUploadError('Network error. Please try again.');
+    };
+    
+    xhr.send(formData);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -62,6 +122,7 @@ const Profile = () => {
       if (data.success === false) {
         dispatch(updateUserFailure(data.error));
         setFormData({
+          avatar: currentUser.avatar,
           username: currentUser.username,
           email: currentUser.email,
           user_character: currentUser.user_character,
@@ -75,6 +136,7 @@ const Profile = () => {
     } catch (error) {
       dispatch(updateUserFailure(error.message));
       setFormData({
+        avatar: currentUser.avatar,
         username: currentUser.username,
         email: currentUser.email,
         user_character: currentUser.user_character || '',
@@ -122,14 +184,35 @@ const Profile = () => {
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input type="file" ref={fileRef} className="hidden" accept="image/*" />
-
-        <img
-          onClick={() => fileRef.current.click()}
-          src={currentUser.avatar}
-          alt="profile"
-          className="w-24 h-24 rounded-full self-center object-cover cursor-pointer ring-2 ring-blue-500 dark:ring-blue-300"
+        <input 
+          type="file" 
+          ref={fileRef} 
+          className="hidden" 
+          accept="image/*" 
+          onChange={handleFileChange}
         />
+        <div className="relative self-center">
+          <img
+            onClick={() => fileRef.current.click()}
+            src={formData.avatar}
+            alt="profile"
+            className="w-24 h-24 rounded-full self-center object-cover cursor-pointer ring-2 ring-blue-500 dark:ring-blue-300"
+          />
+
+          {isUploading && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs">
+                {uploadProgress}%
+              </span>
+            </div>
+          )}
+        </div>
+
+        {fileUploadError && (
+          <p className="text-red-700 dark:text-red-400 text-center text-sm">
+            {fileUploadError}
+          </p>
+        )}
 
         <div className="flex items-center mb-4">
           <label htmlFor="username" className="w-24 font-medium text-gray-800 dark:text-gray-100">
@@ -174,7 +257,7 @@ const Profile = () => {
         </div>
 
         <button
-          disabled={loading}
+          disabled={loading || isUploading}
           className="bg-slate-700 dark:bg-slate-800 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80 transition"
         >
           {loading ? 'Loading...' : 'Update'}
@@ -183,6 +266,7 @@ const Profile = () => {
           Create a Marvel listing
         </Link>
       </form>
+
 
       <div className="flex justify-between mt-5 text-sm sm:text-base">
         <span onClick={handleDeleteUser} className="text-red-700 dark:text-red-400 cursor-pointer">
