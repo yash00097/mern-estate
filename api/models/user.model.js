@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
     },
     user_character: {
-        type: String,
+        type: Object,
     },
 },
 {
