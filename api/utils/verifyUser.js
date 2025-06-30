@@ -1,15 +1,26 @@
-import {errorHandler} from "./error.js";
+import { errorHandler } from "./error.js";
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.access_token;
 
-    if (!token) return next(errorHandler(res, 401, 'No token provided'));
+    if (!token) return next(errorHandler(401, 'No token provided'));
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return next(errorHandler(res, 403, 'Forbidden'));
+        // Handle token expiration specifically
+        if (err) {
+            if (err.name === 'TokenExpiredError') {
+                // Clear expired cookie immediately
+                res.clearCookie("access_token", {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'strict'
+                });
+                return next(errorHandler(401, 'Session expired'));
+            }
+            return next(errorHandler(403, 'Forbidden'));
+        }
         req.user = user;
         next();
-    })
-
-} 
+    });
+}
