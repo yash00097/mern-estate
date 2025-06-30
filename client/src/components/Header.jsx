@@ -2,6 +2,7 @@ import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ThemeToggle from "./ThemeToggle"; 
+import BlurText from "../Reactbits/BlurText/BlurText.jsx";
 
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -11,8 +12,20 @@ const Header = () => {
       <div className="flex justify-between items-center max-w-7xl mx-auto py-3">
         <Link to="/">
           <h1 className="font-extrabold text-lg sm:text-2xl tracking-wide flex flex-wrap">
-            <span className="text-blue-700 dark:text-blue-300">Marvel</span>
-            <span className="text-blue-900 dark:text-blue-100">Estate</span>
+            <BlurText
+              text="Marvel"
+              delay={150}
+              animateBy="words"
+              direction="top"
+              className="text-blue-700 dark:text-blue-300"
+            />
+            <BlurText
+              text="Estate"
+              delay={150}
+              animateBy="words"
+              direction="top"
+              className="text-blue-900 dark:text-blue-100"
+            />
           </h1>
         </Link>
 

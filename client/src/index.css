@@ -5,3 +5,7 @@
 body {
   background-color: rgb(241, 245, 241);
 }
+
+html.dark * {
+  transition: none !important;
+}
