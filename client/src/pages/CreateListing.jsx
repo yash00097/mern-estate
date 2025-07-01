@@ -1,7 +1,76 @@
+import { useState } from "react";
+
 function CreateListing() {
+  const [formData, setFormData] = useState({
+    imageUrls: [],
+  });
+  const [files, setFiles] = useState([]);
+  const [imageUploadError, setImageUploadError] = useState('');
+  const [uploading, setUploading] = useState(false);
+  console.log(formData);
+
+  const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+  
+  
+  const handleImageSubmit = async (e) => {
+    e.preventDefault();
+    if (files.length === 0) {
+      setImageUploadError('Please select at least one image');
+      return;
+    }
+    if (files.length > 6) {
+      setImageUploadError('Maximum 6 images allowed');
+      return;
+    }
+    try {
+      setUploading(true);
+      setImageUploadError('');
+      const urls= [];
+      for (let i = 0; i < files.length; i++) {
+        const data = new FormData();
+        data.append('file', files[i]);
+        data.append('upload_preset', cloudinaryUploadPreset);
+        
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`,
+          {
+            method: 'POST',
+            body: data,
+          }
+        );
+
+        const result = await response.json(); 
+        if (result.error) {
+          setImageUploadError('Image upload failed');
+          return;
+        }  
+        urls.push(result.secure_url);        
+      }
+      setFormData({
+        ...formData,
+        imageUrls: [...formData.imageUrls, ...urls],
+      });
+      setFiles([]);
+      setImageUploadError('');      
+    } catch (error) {
+      setImageUploadError(error.message);
+    } finally {
+      setUploading(false);
+    }
+  }
+  const handleRemoveImage = (index) => {
+    const updatedImageUrls = [...formData.imageUrls];
+    updatedImageUrls.splice(index, 1);
+    setFormData({
+      ...formData,
+      imageUrls: updatedImageUrls,
+    });
+  };
+
   return (
     <main className="p-3 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7 text-gray-900 dark:text-gray-100">
+      <h1 className="text-3xl font-bold text-center my-8 text-blue-800 dark:text-blue-300">
         Create a Marvel Listing
       </h1>
 
@@ -80,18 +149,48 @@ function CreateListing() {
 
           <div className="flex gap-4">
             <input
+              onChange={(e) => setFiles(e.target.files)}
               className="p-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-white rounded w-full placeholder-gray-500 dark:placeholder-gray-300"
               type="file"
               id="images"
               accept="image/*"
               multiple
             />
-            <button className="p-3 text-green-700 dark:text-green-400 border border-green-700 dark:border-green-400 rounded uppercase hover:shadow-lg disabled:opacity-80">
-              Upload
+            <button 
+              type="button"
+              disabled={files.length === 0 || uploading}
+              onClick={handleImageSubmit}
+              className="p-3 text-green-700 dark:text-green-400 border border-green-700 dark:border-green-400 rounded uppercase hover:shadow-lg disabled:opacity-80">
+              {uploading ? "Uploading..." : "Upload "}
             </button>
           </div>
+          <p className='text-red-700 text-sm'>
+            {imageUploadError && imageUploadError}
+          </p>
+          {formData.imageUrls.length > 0 &&
+            formData.imageUrls.map((url, index) => (
+              <div
+                key={url}
+                className='flex justify-between p-3 border items-center'
+              >
+                <img
+                  src={url}
+                  alt='listing image'
+                  className='w-20 h-20 object-contain rounded-lg'
+                />
+                <button
+                  type='button'
+                  onClick={() => handleRemoveImage(index)}
+                  className='p-3 text-red-700 rounded-lg uppercase hover:opacity-75'
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
 
-          <button className="p-3 bg-slate-700 dark:bg-slate-800 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 transition">
+          <button 
+            className="p-3 bg-slate-700 dark:bg-slate-800 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 transition"
+            >
             Create Listing
           </button>
         </div>
