@@ -21,7 +21,6 @@ const Profile = () => {
 
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [fileUploadError, setFileUploadError] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 
   const marvelPublicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY;
@@ -40,60 +39,49 @@ const Profile = () => {
     dispatch(updateUserFailure(null));
   }, [dispatch]);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
-    
-    if (selectedFile.size > 3 * 1024 * 1024) {
+
+    if (selectedFile.size > 2 * 1024 * 1024) { // Adjusted to match your 2MB error message
       setFileUploadError('File size must be less than 2MB');
       return;
     }
+
     if (!selectedFile.type.startsWith('image/')) {
       setFileUploadError('Please select an image file');
       return;
     }
-    
+
     setFileUploadError(false);
     setIsUploading(true);
-    
+
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('upload_preset', cloudinaryUploadPreset);
-    
-    const xhr = new XMLHttpRequest();
-    
-    xhr.upload.addEventListener('progress', (event) => {
-      if (event.lengthComputable) {
-        const percent = Math.round((event.loaded / event.total) * 100);
-        setUploadProgress(percent);
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Image upload failed. Please try again.');
       }
-    });
-    
-    xhr.open(
-      'POST', 
-      `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`
-    );
-    
-    xhr.onload = () => {
+
+      const data = await response.json();
+      setFormData({ ...formData, avatar: data.secure_url });
+    } catch (error) {
+      setFileUploadError(error.message);
+    } finally {
       setIsUploading(false);
-      setUploadProgress(0);
-      
-      if (xhr.status >= 200 && xhr.status < 300) {
-        const response = JSON.parse(xhr.responseText);
-        setFormData(prev => ({ ...prev, avatar: response.secure_url }));
-      } else {
-        setFileUploadError('Image upload failed. Please try again.');
-      }
-    };
-    
-    xhr.onerror = () => {
-      setIsUploading(false);
-      setUploadProgress(0);
-      setFileUploadError('Network error. Please try again.');
-    };
-    
-    xhr.send(formData);
+    }
   };
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -202,7 +190,7 @@ const Profile = () => {
           {isUploading && (
             <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
               <span className="text-white text-xs">
-                {uploadProgress}%
+                Uploading...
               </span>
             </div>
           )}
