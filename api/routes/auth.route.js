@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/signup',signup);
 router.post('/signin',signin);
 router.post('/google', googleAuth);
-router.get('/signout',verifyToken,signout);
+router.get('/signout',signout);
 router.post('/request-otp', requestOTP); 
 router.post('/reset-password', resetPassword);
 
