@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ThemeToggle from "./ThemeToggle"; 
 import BlurText from "../Reactbits/BlurText/BlurText.jsx";
-
+import ShinyText from "../Reactbits/ShinyText/ShinyText.jsx";
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
 
@@ -41,12 +41,12 @@ const Header = () => {
         <ul className="flex gap-4 text-sm sm:text-base font-medium items-center">
           <Link to="/">
             <li className="hidden sm:inline text-blue-900 dark:text-blue-100 hover:text-blue-700 dark:hover:text-blue-300 transition">
-              Home
+              <ShinyText text="Home" disabled={false} speed={5} className='custom-class' baseColor="#00008B"/>
             </li>
           </Link>
           <Link to="/about">
             <li className="hidden sm:inline text-blue-900 dark:text-blue-100 hover:text-blue-700 dark:hover:text-blue-300 transition">
-              About
+              <ShinyText text="About" disabled={false} speed={5} className='custom-class' baseColor="#00008B"/>
             </li>
           </Link>
           <ThemeToggle />
@@ -59,7 +59,7 @@ const Header = () => {
               />
             ) : (
               <li className="text-blue-900 dark:text-blue-100 hover:text-blue-700 dark:hover:text-blue-300 transition cursor-pointer">
-                Sign in
+                <ShinyText text="Sign In" disabled={false} speed={5} className='custom-class' baseColor="#00008B"/>
               </li>
             )}
           </Link>
