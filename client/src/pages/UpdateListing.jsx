@@ -1,8 +1,9 @@
-import { useState } from "react";
-import {useNavigate} from 'react-router-dom';
+import { useState, useEffect } from "react";
+import {useNavigate, useParams} from 'react-router-dom';
 
-function CreateListing() {
+function UpdateListing() {
   const navigate = useNavigate();
+  const params = useParams();
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: "",
@@ -22,6 +23,21 @@ function CreateListing() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      const listingId = params.listingId;
+      const res = await fetch(`/api/listing/get/${listingId}`);
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setFormData(data);
+    };
+
+    fetchListing();
+  }, []);
 
   const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
@@ -121,7 +137,7 @@ const handleChange = (e) => {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
-      const res = await fetch('/api/listing/create', {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +160,7 @@ const handleChange = (e) => {
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-center my-8 text-blue-800 dark:text-blue-300">
-        Create a Marvel Listing
+        Update Your Listing
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
@@ -278,7 +294,7 @@ const handleChange = (e) => {
             className="p-3 bg-slate-700 dark:bg-slate-800 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80 transition"
             disabled={loading|| uploading}
             >
-            {loading ? "Creating..." : "Create Listing"}
+            {loading ? "Updating..." : "Update Listing"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
@@ -287,4 +303,4 @@ const handleChange = (e) => {
   );
 }
 
-export default CreateListing;
+export default UpdateListing;
