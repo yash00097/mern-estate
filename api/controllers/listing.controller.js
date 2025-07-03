@@ -74,7 +74,7 @@ export const deleteListing = async (req, res, next) => {
 
 export const getPendingListings = async (req, res, next) => {
     try {
-        const pendingListings = await Listing.find({ status: 'pending' }).populate('user', 'username email');
+        const pendingListings = await Listing.find({ status: 'pending' }).populate('user', 'username avatar');
         res.status(200).json(pendingListings);
     } catch (error) {
         next(error);

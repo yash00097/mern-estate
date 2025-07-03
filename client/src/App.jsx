@@ -10,6 +10,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import VerifyOTP from './pages/VerifyOTP'
 import PrivateRoute from './components/PrivateRoute'
 import UpdateListing from './pages/UpdateListing'
+import PendingListings from './pages/PendingListings'
 function App() {
   return (
 
@@ -26,6 +27,7 @@ function App() {
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/create-listing' element={<CreateListing/>}/>
         <Route path='/update-listing/:listingId' element={<UpdateListing />}/>
+        <Route path='/pending-listings' element={<PendingListings/>}/>
       </Route>
      </Routes>
     </BrowserRouter>
