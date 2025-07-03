@@ -24,3 +24,11 @@ export const verifyToken = (req, res, next) => {
         next();
     });
 }
+
+export const verifyAdmin = (req, res, next) => {
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        return next(errorHandler(403, 'Forbidden: Admin access required'));
+    }
+};
