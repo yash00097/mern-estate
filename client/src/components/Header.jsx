@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import ThemeToggle from "./ThemeToggle"; 
 import BlurText from "../Reactbits/BlurText/BlurText.jsx";
 import ShinyText from "../Reactbits/ShinyText/ShinyText.jsx";
+import GradientText from "../Reactbits/GradientText/GradientText.jsx";
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
 
@@ -28,6 +29,16 @@ const Header = () => {
             />
           </h1>
         </Link>
+        {currentUser && currentUser.role === "admin" && <Link to="/pending-listings">
+          <GradientText
+            colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+            animationSpeed={14}
+            showBorder={false}
+            className="custom-class"
+          >
+            Pending Listings
+          </GradientText>
+        </Link>}
 
         <form className="bg-white dark:bg-gray-700 px-3 py-2 rounded-full shadow-sm flex items-center gap-2 w-40 sm:w-96">
           <input

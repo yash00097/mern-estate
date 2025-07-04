@@ -174,6 +174,10 @@ const Profile = () => {
         setShowListingsError(true);
         return;
       }
+      if (data.length === 0) {
+        setShowListingsError(true);
+        return;
+      }
       setUserListings(data);
     } catch  {
       setShowListingsError(true);
@@ -307,10 +311,10 @@ const Profile = () => {
       </p>
       
       <button onClick={handleShowListings} className='text-green-700 dark:text-green-400 w-full'>
-        Show Listings
+        Your Listings
       </button>
-      <p className='text-red-700 mt-5'>
-        {showListingsError ? 'Error showing listings' : ''}
+      <p className='text-red-700 dark:text-red-400 mt-5'>
+        {showListingsError ? 'Error showing listings / you have no listings.' : ''}
       </p>
 
       {userListings &&

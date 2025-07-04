@@ -7,7 +7,7 @@ export default function GradientText({
 }) {
   const gradientStyle = {
     backgroundImage: `linear-gradient(to right, ${colors.join(", ")})`,
-    animationDuration: `${animationSpeed}s`,
+    '--shine-speed': `${animationSpeed}s`, 
   };
 
   return (
@@ -16,7 +16,7 @@ export default function GradientText({
     >
       {showBorder && (
         <div
-          className="absolute inset-0 bg-cover z-0 pointer-events-none animate-gradient"
+          className="absolute inset-0 bg-cover z-0 pointer-events-none animate-shine"
           style={{
             ...gradientStyle,
             backgroundSize: "300% 100%",
@@ -35,7 +35,7 @@ export default function GradientText({
         </div>
       )}
       <div
-        className="inline-block relative z-2 text-transparent bg-cover animate-gradient"
+        className="inline-block relative z-2 text-transparent bg-cover animate-shine"
         style={{
           ...gradientStyle,
           backgroundClip: "text",
@@ -48,22 +48,3 @@ export default function GradientText({
     </div>
   );
 }
-
-// tailwind.config.js
-// module.exports = {
-//   theme: {
-//     extend: {
-//       keyframes: {
-//         gradient: {
-//           '0%': { backgroundPosition: '0% 50%' },
-//           '50%': { backgroundPosition: '100% 50%' },
-//           '100%': { backgroundPosition: '0% 50%' },
-//         },
-//       },
-//       animation: {
-//         gradient: 'gradient 8s linear infinite'
-//       },
-//     },
-//   },
-//   plugins: [],
-// };
