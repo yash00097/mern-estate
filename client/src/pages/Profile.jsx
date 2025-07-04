@@ -335,6 +335,19 @@ const Profile = () => {
               >
                 <p>{listing.name}</p>
               </Link>
+              <span
+                className={`text-xs font-medium px-2 py-1 rounded ${
+                  listing.status === 'verified'
+                    ? 'bg-green-100 text-green-800'
+                    : listing.status === 'pending'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-red-100 text-red-800'
+                }`}
+              >
+                {listing.status === 'pending' && 'Not yet verified'}
+                {listing.status === 'approved' && 'Verified'}
+                {listing.status === 'rejected' && 'Rejected'}
+              </span>
   
               <div className='flex flex-col item-center'>
                 <button 
@@ -344,7 +357,12 @@ const Profile = () => {
                     Delete
                 </button>
                 <Link to={`/update-listing/${listing._id}`}>
-                  <button className='text-green-700 dark:text-green-400 uppercase'>Edit</button>
+                  <button 
+                    className='text-green-700 dark:text-green-400 uppercase'
+                    disabled={listing.status === 'rejected'}
+                    >
+                      Edit
+                  </button>
                 </Link>
               </div>
             </div>

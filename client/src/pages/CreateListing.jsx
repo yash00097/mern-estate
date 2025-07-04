@@ -134,7 +134,7 @@ const handleChange = (e) => {
       if (data.success === false) {
         setError(data.message);
       }
-      navigate(`/listing/${data._id}`);
+    navigate('/', { state: { showAlert: true } });
     } catch (error) {
       setError(error.message);
       setLoading(false);

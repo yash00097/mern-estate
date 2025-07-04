@@ -11,6 +11,7 @@ import VerifyOTP from './pages/VerifyOTP'
 import PrivateRoute from './components/PrivateRoute'
 import UpdateListing from './pages/UpdateListing'
 import PendingListings from './pages/PendingListings'
+import Listing from './pages/Listing'
 function App() {
   return (
 
@@ -23,6 +24,7 @@ function App() {
       <Route path='/sign-up' element={<SignUp/>}/>
       <Route path='/forgot-password' element={<ForgotPassword />} /> 
       <Route path='/verify-otp' element={<VerifyOTP />} /> 
+      <Route path='/listing/:listingId' element={<Listing/>}/>
       <Route element={<PrivateRoute/>}>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/create-listing' element={<CreateListing/>}/>
