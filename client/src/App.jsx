@@ -13,6 +13,7 @@ import UpdateListing from './pages/UpdateListing'
 import PendingListings from './pages/PendingListings'
 import Listing from './pages/Listing'
 import Search from './pages/Search'
+import PageNotFound from './pages/PageNotFound'
 function App() {
   return (
 
@@ -33,6 +34,7 @@ function App() {
         <Route path='/update-listing/:listingId' element={<UpdateListing />}/>
         <Route path='/pending-listings' element={<PendingListings/>}/>
       </Route>
+      <Route path='*' element={<PageNotFound/>}/>
      </Routes>
     </BrowserRouter>
   )

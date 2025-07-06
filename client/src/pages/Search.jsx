@@ -140,7 +140,7 @@ return (
             type='text'
             id='searchTerm'
             placeholder='Search...'
-            className='border rounded-lg p-3 w-full dark:bg-gray-800 dark:text-white dark:border-gray-800'
+            className='border rounded-lg p-3 w-full dark:bg-gray-600 dark:text-white dark:border-gray-800'
             value={sidebardata.searchTerm}
             onChange={handleChange}
           />
@@ -226,7 +226,7 @@ return (
             onChange={handleChange}
             defaultValue={'created_at_desc'}
             id='sort_order'
-            className='border rounded-lg p-3 dark:bg-gray-800 dark:text-white dark:border-gray-800'
+            className='border rounded-lg p-3 dark:bg-gray-600 dark:text-white dark:border-gray-800'
           >
             <option value='regularPrice_desc'>Price high to low</option>
             <option value='regularPrice_asc'>Price low to high</option>
@@ -235,7 +235,7 @@ return (
           </select>
         </div>
 
-        <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 dark:bg-slate-600'>
+        <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 dark:bg-slate-800'>
           Search
         </button>
       </form>
