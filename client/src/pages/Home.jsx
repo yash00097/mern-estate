@@ -127,12 +127,13 @@ const Home = () => {
               </Link>
             </div>
             <div className='flex flex-wrap gap-6'>
-              {offerListings.map((listing) => (
+              {offerListings.slice(0, 4).map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
           </div>
         )}
+
 
         {rentListings && rentListings.length > 0 && (
           <div>
@@ -148,7 +149,7 @@ const Home = () => {
               </Link>
             </div>
             <div className='flex flex-wrap gap-6'>
-              {rentListings.map((listing) => (
+              {rentListings.slice(0, 4).map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
@@ -169,7 +170,7 @@ const Home = () => {
               </Link>
             </div>
             <div className='flex flex-wrap gap-6'>
-              {saleListings.map((listing) => (
+              {saleListings.slice(0, 4).map((listing) => (
                 <ListingItem listing={listing} key={listing._id} />
               ))}
             </div>
