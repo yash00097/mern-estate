@@ -6,12 +6,14 @@ import authRoutes from './routes/auth.route.js';
 import marvelRouter from './routes/marvel.route.js';
 import listingRoutes from './routes/listing.route.js';
 import cookieParser from "cookie-parser";
+import path from 'path';
 
 
  
 
 dotenv.config();
 const app = express();
+const __dirname = path.resolve();
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cookieParser());
 
@@ -19,6 +21,12 @@ app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/marvel', marvelRouter);
 app.use('/api/listing',listingRoutes);
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
