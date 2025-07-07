@@ -88,13 +88,13 @@ const Header = () => {
           <Link to="/profile">
             {currentUser ? (
               <img
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-blue-500 dark:ring-blue-300"
+                className="w-8 h-8 min-w-[2rem] min-h-[2rem] rounded-full object-cover ring-2 ring-blue-500 dark:ring-blue-300"
                 src={currentUser.avatar}
                 alt="user"
               />
             ) : (
               <li className="text-blue-900 dark:text-blue-100 hover:text-blue-700 dark:hover:text-blue-300 transition cursor-pointer">
-                <ShinyText text="Sign In" disabled={false} speed={5} className='custom-class' baseColor="#00008B"/>
+                <ShinyText text="Sign In" disabled={false} speed={5} className='custom-class' baseColor="#00008B" />
               </li>
             )}
           </Link>
