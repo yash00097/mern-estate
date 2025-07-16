@@ -41,6 +41,9 @@ const Profile = () => {
     dispatch(updateUserFailure(null));
   }, [dispatch]);
 
+  const handleSessionExpired = () => {
+  dispatch(signOutSuccess());
+  };
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
@@ -119,6 +122,10 @@ const Profile = () => {
         });
         return;
       }
+      if(res.status === 401) {
+        handleSessionExpired();
+        return;
+      }
       console.log(data);
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
@@ -170,6 +177,10 @@ const Profile = () => {
       setShowListingsError(false);
       const res = await fetch(`/api/user/listings/${currentUser._id}`);
       const data = await res.json();
+      if (res.status === 401) {
+        handleSessionExpired();
+        return;
+      }
       if (data.success === false) {
         setShowListingsError(true);
         return;
