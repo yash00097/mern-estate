@@ -12,7 +12,6 @@ import {
   signOutFailure
 } from '../redux/user/userSlice';
 import { Link } from 'react-router-dom';
-import MarvelCharacterInput from '../components/MarvelCharacterInput'; 
 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -25,8 +24,6 @@ const Profile = () => {
   const [userListings, setUserListings] = useState([]);
   const [showListingsError, setShowListingsError] = useState(false);
 
-  const marvelPublicKey = import.meta.env.VITE_MARVEL_PUBLIC_KEY;
-  const marvelPrivateKey = import.meta.env.VITE_MARVEL_PRIVATE_KEY;
   const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
@@ -34,7 +31,6 @@ const Profile = () => {
     avatar: currentUser.avatar,
     username: currentUser.username,
     email: currentUser.email,
-    user_character: currentUser.user_character || '',
   });
 
   useEffect(() => {
@@ -95,10 +91,6 @@ const Profile = () => {
       dispatch(updateUserFailure(null));
       setUpdateSuccess(false);
     }
-  };
-
-  const handleCharacterChange = (value) => {
-    setFormData((prev) => ({ ...prev, user_character: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -274,20 +266,6 @@ const Profile = () => {
             placeholder="Email"
             className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 p-3 rounded-lg flex-1"
           />
-        </div>
-
-        <div className="flex items-center mb-4">
-          <label className="w-24 font-medium text-gray-800 dark:text-gray-100">
-            Alias:
-          </label>
-          <div className="flex-1">
-            <MarvelCharacterInput
-              value={formData.user_character}
-              onChange={handleCharacterChange}
-              publicKey={marvelPublicKey}
-              privateKey={marvelPrivateKey}
-            />
-          </div>
         </div>
 
         <button

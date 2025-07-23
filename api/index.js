@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import { connectDB } from './db/connectDB.js';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
-import marvelRouter from './routes/marvel.route.js';
 import listingRoutes from './routes/listing.route.js';
 import cookieParser from "cookie-parser";
 import path from 'path';
@@ -19,7 +18,6 @@ app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
-app.use('/api/marvel', marvelRouter);
 app.use('/api/listing',listingRoutes);
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
