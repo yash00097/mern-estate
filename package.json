@@ -1,0 +1,20 @@
+{
+  "name": "mern-estate-vercel",
+  "version": "1.0.0",
+  "description": "MERN Estate application deployed on Vercel",
+  "main": "api/index.js",
+  "scripts": {
+    "build": "cd client && npm install && npm run build",
+    "start": "node api/index.js",
+    "dev": "concurrently \"npm run dev --prefix api\" \"npm run dev --prefix client\"",
+    "install-client": "cd client && npm install",
+    "install-api": "cd api && npm install",
+    "install-all": "npm run install-api && npm run install-client"
+  },
+  "keywords": ["mern", "estate", "vercel"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
