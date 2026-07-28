@@ -15,6 +15,7 @@ import {
 } from 'react-icons/fa';
 import Contact from '../components/Contact';
 import Alert from '@mui/material/Alert';
+import API_BASE_URL from '../apiConfig';
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -30,7 +31,7 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/listing/get/${params.listingId}`);
+        const res = await fetch(`${API_BASE_URL}/api/listing/get/${params.listingId}`, { credentials: 'include' });
         const data = await res.json();
         if (data.success === false) {
           setError(true);

@@ -54,7 +54,7 @@ export const signin = async (req, res, next) => {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000, 
             secure: process.env.NODE_ENV === 'production', 
-            sameSite: 'strict' 
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
           })
           .status(200)
           .json(userWithoutPassword);
@@ -71,7 +71,7 @@ export const googleAuth = async (req, res, next) => {
       const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET,{ expiresIn: "24h" });
       const { password: pass, ...rest } = user._doc;
       res
-        .cookie('access_token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' })
+        .cookie('access_token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' })
         .status(200)
         .json(rest);
         
@@ -82,7 +82,7 @@ export const googleAuth = async (req, res, next) => {
       await newUser.save();
       const token = jwt.sign({ id: newUser._id, role: newUser.role }, process.env.JWT_SECRET,{ expiresIn: "24h" });
       const { password: pass, ...rest } = newUser._doc;
-      res.cookie('access_token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, secure: process.env.NODE_ENV === 'production', sameSite: 'strict' }).status(200).json(rest);
+      res.cookie('access_token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' }).status(200).json(rest);
       
     }
   } catch (error) {
@@ -94,8 +94,8 @@ export const signout = (req, res,next) => {
     try {
         res.clearCookie("access_token", {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     });
     res.status(200).json("User has been signed out successfully!");
     } catch (error) {

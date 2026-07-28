@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {useNavigate, useParams} from 'react-router-dom';
+import API_BASE_URL from '../apiConfig';
 
 function UpdateListing() {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ function UpdateListing() {
   useEffect(() => {
     const fetchListing = async () => {
       const listingId = params.listingId;
-      const res = await fetch(`/api/listing/get/${listingId}`);
+      const res = await fetch(`${API_BASE_URL}/api/listing/get/${listingId}`, { credentials: 'include' });
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
@@ -137,8 +138,9 @@ const handleChange = (e) => {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
-      const res = await fetch(`/api/listing/update/${params.listingId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/listing/update/${params.listingId}`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },

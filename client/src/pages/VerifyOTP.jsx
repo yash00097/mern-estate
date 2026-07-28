@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../apiConfig';
 
 export default function VerifyOTP() {
     const [otp, setOtp] = useState('');
@@ -13,8 +14,9 @@ export default function VerifyOTP() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch('/api/auth/reset-password', {
+            const res = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, otp, newPassword }),
             });

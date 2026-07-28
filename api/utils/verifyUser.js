@@ -14,7 +14,7 @@ export const verifyToken = (req, res, next) => {
                 res.clearCookie("access_token", {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'strict'
+                    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
                 });
                 return next(errorHandler(401, 'Session expired'));
             }

@@ -16,6 +16,7 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import API_BASE_URL from '../apiConfig';
 
 const AdminListingCard = styled(Card)(({ theme }) => ({
   maxWidth: 345,
@@ -37,7 +38,8 @@ export default function PendingListings() {
     const fetchPendingListings = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('/api/listing/pending', {
+        const response = await fetch(`${API_BASE_URL}/api/listing/pending`, {
+          credentials: 'include',
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -65,8 +67,9 @@ export default function PendingListings() {
     
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/listing/${action}/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/listing/${action}/${id}`, {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

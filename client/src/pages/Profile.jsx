@@ -12,6 +12,7 @@ import {
   signOutFailure
 } from '../redux/user/userSlice';
 import { Link } from 'react-router-dom';
+import API_BASE_URL from '../apiConfig';
 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -97,8 +98,9 @@ const Profile = () => {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/user/update/${currentUser._id}`, {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
@@ -136,8 +138,9 @@ const Profile = () => {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       const data = await res.json();
       if (data.success === false) {
@@ -153,7 +156,7 @@ const Profile = () => {
   const handleSignOut = async () => {
     try {
       dispatch(signOutStart());
-      const res = await fetch('/api/auth/signout');
+      const res = await fetch(`${API_BASE_URL}/api/auth/signout`, { credentials: 'include' });
       const data = await res.json();
       if (data.success === false) {
         dispatch(signOutFailure(data.error));
@@ -167,7 +170,7 @@ const Profile = () => {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const res = await fetch(`${API_BASE_URL}/api/user/listings/${currentUser._id}`, { credentials: 'include' });
       const data = await res.json();
       if (res.status === 401) {
         handleSessionExpired();
@@ -188,8 +191,9 @@ const Profile = () => {
   };
   const handleDeleteListing = async (listingId) => {
     try {
-      const res = await fetch(`/api/listing/delete/${listingId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/listing/delete/${listingId}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       const data = await res.json();
       if (data.success === false) {

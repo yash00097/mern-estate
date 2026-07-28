@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {useNavigate} from 'react-router-dom';
+import API_BASE_URL from '../apiConfig';
 
 function CreateListing() {
   const navigate = useNavigate();
@@ -121,8 +122,9 @@ const handleChange = (e) => {
         return setError('Discount price must be lower than regular price');
       setLoading(true);
       setError(false);
-      const res = await fetch('/api/listing/create', {
+      const res = await fetch(`${API_BASE_URL}/api/listing/create`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
